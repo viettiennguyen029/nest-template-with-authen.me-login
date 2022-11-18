@@ -6,7 +6,11 @@ import { IRequest } from 'src/common/common.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('gobiz')
+  login() {}
 
   @UseGuards(AuthenticatedGuard)
   @Get('gobiz/callback')
