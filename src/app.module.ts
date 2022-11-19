@@ -6,9 +6,10 @@ import { TeamModule } from './team/team.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MatchModule } from './match/match.module';
 import { OddModule } from './odd/odd.module';
+import { BetModule } from './bet/bet.module';
 
 @Module({
-  imports: [AuthModule, TeamModule, PrismaModule, MatchModule, OddModule],
+  imports: [AuthModule, TeamModule, PrismaModule, MatchModule, OddModule, BetModule],
   controllers: [AppController],
   providers: [AppService],
 })

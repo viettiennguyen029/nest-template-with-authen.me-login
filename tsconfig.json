@@ -24,6 +24,7 @@
       "@team/*": ["src/team/*"],
       "@match/*": ["src/match/*"],
       "@odd/*": ["src/odd/*"],
+      "@bet/*": ["src/bet/*"],
     } 
   }
 }
