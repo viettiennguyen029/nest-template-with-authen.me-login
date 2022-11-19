@@ -23,6 +23,7 @@
       "@auth/*": ["src/auth/*"],
       "@team/*": ["src/team/*"],
       "@match/*": ["src/match/*"],
+      "@odd/*": ["src/odd/*"],
     } 
   }
 }
