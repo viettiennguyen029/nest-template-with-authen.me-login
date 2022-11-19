@@ -18,8 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@prisma_module/*": ["src/prisma/*"],
       "@config/*": ["src/config/*"],
       "@auth/*": ["src/auth/*"],
+      "@team/*": ["src/team/*"],
     } 
   }
 }
