@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @unique @default(autoincrement())
+  username  String?   @unique
+  fullname  String?
+  email     String?
+  gender    String?
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+  bets      Bet[]
+
+  @@map("user")
+}
+
+model Team {
+  id          Int       @id @unique @default(autoincrement())
+  code        String?   @unique
+  name        String?
+  flag        String?
+  groupCode   String?   @map("group_code")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+  homeMatches Match[]   @relation("homeTeam")
+  awayMatches Match[]   @relation("awayTeam")
+
+  @@map("team")
+}
+
+model Match {
+  id              Int       @id @unique @default(autoincrement())
+  homeTeamId      Int       @map("home_team_id")
+  homeTeam        Team      @relation("homeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId      Int       @map("away_team_id")
+  awayTeam        Team      @relation("awayTeam", fields: [awayTeamId], references: [id])
+  code            String?   @unique
+  startTime       DateTime? @map("start_time")
+  currentScoreUrl String?   @map("current_score_url")
+  type            String? // GROUP_STAGE,ROUND_OF_16, QUATER, SEMI_FINAL, FINAL
+  fullTimeHome    Int?      @map("fulltime_home")
+  fullTimeAway    Int?      @map("fulltime_away")
+  matchTimeHome   Int?      @map("matchtime_home")
+  matchTimeAway   Int?      @map("matchtime_away")
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+  odds            Odd[]
+  bets            Bet[]
+
+  @@map("match")
+}
+
+model Odd {
+  id        Int       @id @unique @default(autoincrement())
+  matchId   Int?      @map("match_id")
+  match     Match?    @relation(fields: [matchId], references: [id])
+  type      String?
+  code      String? // Home, Away, Draw,...
+  ratio     Float?
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("odd")
+}
+
+model Bet {
+  id        Int       @id @unique @default(autoincrement())
+  userId    Int?      @map("user_id")
+  user      User?     @relation(fields: [userId], references: [id])
+  matchId   Int?      @map("map_id")
+  match     Match?    @relation(fields: [matchId], references: [id])
+  type      String?
+  ratio     String?
+  code      String?
+  status    String? //INIT, CONFIRMED, WIN, LOSE, REJECTED
+  money     Float?
+  prize     Float?
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("bet")
+}
+
+model Config {
+  id                                  Int    @id @unique @default(autoincrement())
+  maxMoneyCanBet                      Float? @map("max_money_can_bet")
+  minTimeCanCreateBetBeforeMatchStart Float? @map("min_time_can_create_bet_before_match_start")
+
+  @@map("config")
+}
