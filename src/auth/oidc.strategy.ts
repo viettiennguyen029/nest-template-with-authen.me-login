@@ -19,7 +19,7 @@ export const buildOpenIdClient = async (config: ConfigService) => {
   return client;
 };
 
-export class AuthStrategy extends PassportStrategy(Strategy, 'oidc') {
+export class OidcStrategy extends PassportStrategy(Strategy, 'oidc') {
   static client: Client;
 
   constructor(
@@ -38,25 +38,19 @@ export class AuthStrategy extends PassportStrategy(Strategy, 'oidc') {
       passReqToCallback: false,
       usePKCE: false,
     });
-    AuthStrategy.client = client;
+    OidcStrategy.client = client;
   }
 
-  async validate(tokenset: TokenSet): Promise<any> {
-    const userinfo = await AuthStrategy.client.userinfo(tokenset.access_token);
+  async validate(tokenset: TokenSet): Promise<TokenSet> {
     try {
       // const id_token = tokenset.id_token;
-      // const access_token = tokenset.access_token;
-      // const refresh_token = tokenset.refresh_token;
-      // const user = {
-      //   id_token,
-      //   access_token,
-      //   refresh_token,
-      //   userinfo,
-      // };
-      await this.userService.upsertUserByUsername(userinfo);
+      const userInfo = await OidcStrategy.client.userinfo(
+        tokenset.access_token,
+      );
+      await this.userService.upsertUserByUsername(userInfo);
       return tokenset;
     } catch (err) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(err);
     }
   }
 }

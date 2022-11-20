@@ -1,26 +1,26 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthenticatedGuard } from '@auth/auth.guard';
+import { LoginGuard } from '@auth/login.guard';
 import { Response } from 'express';
 import { IRequest } from 'src/common/common.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ConfigService) {}
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(LoginGuard)
   @Get('gobiz')
   login() {}
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(LoginGuard)
   @Get('gobiz/callback')
   loginCallback(@Req() req: IRequest, @Res() res: Response) {
     return res.redirect(
       `${this.configService.get<string>(
         'OAUTH2_CLIENT_LOGIN_SUCCESS_REDIRECT',
-      )}?access-token=${req.user.access_token}&expires-at=${
-        req.user.expires_at
-      }`,
+      )}?id_token=${req.user.id_token}
+      &access-token=${req.user.access_token}
+      &expires-at=${req.user.expires_at}`,
     );
   }
 }
