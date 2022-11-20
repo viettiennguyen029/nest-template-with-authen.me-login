@@ -12,11 +12,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Public } from 'src/common/public.decorator';
+import { Public } from 'src/common/decorator/public.decorator';
 import { BetService } from '@bet/bet.service';
 import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
 import { AuthenticatedGuard } from 'src/common/guard/authenticated.guard';
-import { IRequest } from 'src/common/common.interface';
+import { IRequest } from 'src/common/interface/common.interface';
 
 @Controller('bets')
 export class BetController {

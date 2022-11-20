@@ -2,7 +2,7 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoginGuard } from '@auth/login.guard';
 import { Response } from 'express';
-import { IRequest } from 'src/common/common.interface';
+import { IRequest } from 'src/common/interface/common.interface';
 
 @Controller('auth')
 export class AuthController {

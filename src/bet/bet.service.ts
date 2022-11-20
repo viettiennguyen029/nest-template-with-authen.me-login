@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Bet } from '@prisma/client';
 import { PrismaService } from '@prisma_module/prisma.service';
 import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
-import { BET_STATUS, ODDS_CODE } from 'src/common/consts';
+import { BET_STATUS, ODDS_CODE } from 'src/common/constant/constants';
 
 @Injectable()
 export class BetService {

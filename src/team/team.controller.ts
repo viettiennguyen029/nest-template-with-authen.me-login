@@ -9,7 +9,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { TeamService } from '@team/team.service';
-import { Public } from 'src/common/public.decorator';
+import { Public } from 'src/common/decorator/public.decorator';
 import { QueryTeamDto } from './dto/query-team.dto';
 
 @Controller('teams')

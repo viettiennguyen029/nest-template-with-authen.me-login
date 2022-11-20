@@ -5,7 +5,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Public } from 'src/common/public.decorator';
+import { Public } from 'src/common/decorator/public.decorator';
 import { OddService } from './odd.service';
 
 @Controller('odds')
