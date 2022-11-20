@@ -60,7 +60,7 @@ CREATE TABLE "odd" (
 CREATE TABLE "bet" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER,
-    "map_id" INTEGER,
+    "match_id" INTEGER,
     "type" TEXT,
     "ratio" TEXT,
     "code" TEXT,
@@ -122,4 +122,4 @@ ALTER TABLE "odd" ADD CONSTRAINT "odd_match_id_fkey" FOREIGN KEY ("match_id") RE
 ALTER TABLE "bet" ADD CONSTRAINT "bet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "bet" ADD CONSTRAINT "bet_map_id_fkey" FOREIGN KEY ("map_id") REFERENCES "match"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "bet" ADD CONSTRAINT "bet_match_id_fkey" FOREIGN KEY ("match_id") REFERENCES "match"("id") ON DELETE SET NULL ON UPDATE CASCADE;
