@@ -11,8 +11,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Public } from 'src/common/public.decorator';
-import { BetService } from './bet.service';
-import { CreateNewBetDto } from './dto/create-bet.dto';
+import { BetService } from '@bet/bet.service';
+import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
 
 @Controller('bets')
 export class BetController {
@@ -24,12 +24,19 @@ export class BetController {
   async createNewBet(@Body() body: CreateNewBetDto) {
     const newBet = await this.betService.createNewBet(
       body,
-      'viettiennguyen029',
+      'viettiennguyen029', //TODO: Get username from returned token
     );
     return {
       data: newBet,
     };
   }
+
+  // @Post('bets-result')
+  // @Public()
+  // async recognizeBetResult(@Param('match_code') matchCode: string) {
+  //   return
+  // }
+
   @Get()
   @Public()
   async getBets() {

@@ -55,7 +55,7 @@ model Match {
   updatedAt       DateTime? @default(now()) @map("updated_at") @db.Timestamptz
   odds            Odd[]
   bets            Bet[]
-
+  @@unique([code, type])
   @@map("match")
 }
 
@@ -84,6 +84,7 @@ model Bet {
   status    String? //INIT, CONFIRMED, WIN, LOSE, REJECTED
   money     Float?
   prize     Float?
+  loss Float?
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz
 
