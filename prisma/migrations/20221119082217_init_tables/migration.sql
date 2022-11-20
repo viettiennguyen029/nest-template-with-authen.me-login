@@ -62,7 +62,7 @@ CREATE TABLE "bet" (
     "user_id" INTEGER,
     "match_id" INTEGER,
     "type" TEXT,
-    "ratio" TEXT,
+    "ratio" DOUBLE PRECISION,
     "code" TEXT,
     "status" TEXT,
     "money" DOUBLE PRECISION,

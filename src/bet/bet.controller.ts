@@ -1,20 +1,35 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   InternalServerErrorException,
   Param,
+  Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { Public } from 'src/common/public.decorator';
 import { BetService } from './bet.service';
+import { CreateNewBetDto } from './dto/create-bet.dto';
 
 @Controller('bets')
 export class BetController {
   constructor(private readonly betService: BetService) {}
 
+  @Post()
+  @Public()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async createNewBet(@Body() body: CreateNewBetDto) {
+    const newBet = await this.betService.createNewBet(
+      body,
+      'viettiennguyen029',
+    );
+    return {
+      data: newBet,
+    };
+  }
   @Get()
   @Public()
   async getBets() {

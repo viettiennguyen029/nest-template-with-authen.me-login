@@ -79,7 +79,7 @@ model Bet {
   matchId   Int?      @map("match_id")
   match     Match?    @relation(fields: [matchId], references: [id])
   type      String?
-  ratio     String?
+  ratio     Float?
   code      String?
   status    String? //INIT, CONFIRMED, WIN, LOSE, REJECTED
   money     Float?
