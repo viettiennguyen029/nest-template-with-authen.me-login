@@ -7,35 +7,31 @@ import {
   InternalServerErrorException,
   Param,
   Post,
+  Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { Public } from 'src/common/public.decorator';
 import { BetService } from '@bet/bet.service';
 import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
+import { AuthenticatedGuard } from 'src/common/guard/authenticated.guard';
+import { IRequest } from 'src/common/common.interface';
 
 @Controller('bets')
 export class BetController {
   constructor(private readonly betService: BetService) {}
 
   @Post()
-  @Public()
+  @UseGuards(AuthenticatedGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async createNewBet(@Body() body: CreateNewBetDto) {
-    const newBet = await this.betService.createNewBet(
-      body,
-      'viettiennguyen029', //TODO: Get username from returned token
-    );
+  async createNewBet(@Req() request: IRequest, @Body() body: CreateNewBetDto) {
+    const username: string = request.user.preferred_username as string;
+    const newBet = await this.betService.createNewBet(body, username);
     return {
       data: newBet,
     };
   }
-
-  // @Post('bets-result')
-  // @Public()
-  // async recognizeBetResult(@Param('match_code') matchCode: string) {
-  //   return
-  // }
 
   @Get()
   @Public()
