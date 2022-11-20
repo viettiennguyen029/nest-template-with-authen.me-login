@@ -91,7 +91,7 @@ model Bet {
 }
 
 model Config {
-  id                                  Int    @id @unique @default(autoincrement())
+  id                                  Int    @id @unique
   maxMoneyCanBet                      Float? @map("max_money_can_bet")
   minTimeCanCreateBetBeforeMatchStart Float? @map("min_time_can_create_bet_before_match_start")
 

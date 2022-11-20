@@ -75,7 +75,7 @@ CREATE TABLE "bet" (
 
 -- CreateTable
 CREATE TABLE "config" (
-    "id" SERIAL NOT NULL,
+    "id" INTEGER NOT NULL,
     "max_money_can_bet" DOUBLE PRECISION,
     "min_time_can_create_bet_before_match_start" DOUBLE PRECISION,
 
