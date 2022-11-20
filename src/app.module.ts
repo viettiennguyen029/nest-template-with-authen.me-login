@@ -7,9 +7,18 @@ import { PrismaModule } from './prisma/prisma.module';
 import { MatchModule } from './match/match.module';
 import { OddModule } from './odd/odd.module';
 import { BetModule } from './bet/bet.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthModule, TeamModule, PrismaModule, MatchModule, OddModule, BetModule],
+  imports: [
+    AuthModule,
+    TeamModule,
+    PrismaModule,
+    MatchModule,
+    OddModule,
+    BetModule,
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -2,7 +2,7 @@
 CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "username" TEXT,
-    "fullname" TEXT,
+    "name" TEXT,
     "email" TEXT,
     "gender" TEXT,
     "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

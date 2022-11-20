@@ -1,6 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { UserService } from '@user/user.service';
 import { Client, Issuer, Strategy, TokenSet } from 'openid-client';
 
 export const buildOpenIdClient = async (config: ConfigService) => {
@@ -21,7 +22,11 @@ export const buildOpenIdClient = async (config: ConfigService) => {
 export class AuthStrategy extends PassportStrategy(Strategy, 'oidc') {
   static client: Client;
 
-  constructor(client: Client, config: ConfigService) {
+  constructor(
+    client: Client,
+    config: ConfigService,
+    private userService: UserService,
+  ) {
     super({
       client: client,
       params: {
@@ -37,18 +42,19 @@ export class AuthStrategy extends PassportStrategy(Strategy, 'oidc') {
   }
 
   async validate(tokenset: TokenSet): Promise<any> {
-    const userinfo = await AuthStrategy.client.userinfo(tokenset);
+    const userinfo = await AuthStrategy.client.userinfo(tokenset.access_token);
     try {
-      const id_token = tokenset.id_token;
-      const access_token = tokenset.access_token;
-      const refresh_token = tokenset.refresh_token;
-      const user = {
-        id_token,
-        access_token,
-        refresh_token,
-        userinfo,
-      };
-      return user;
+      // const id_token = tokenset.id_token;
+      // const access_token = tokenset.access_token;
+      // const refresh_token = tokenset.refresh_token;
+      // const user = {
+      //   id_token,
+      //   access_token,
+      //   refresh_token,
+      //   userinfo,
+      // };
+      await this.userService.upsertUserByUsername(userinfo);
+      return tokenset;
     } catch (err) {
       throw new UnauthorizedException();
     }

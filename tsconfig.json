@@ -20,6 +20,7 @@
     "paths": {
       "@prisma_module/*": ["src/prisma/*"],
       "@config/*": ["src/config/*"],
+      "@user/*": ["src/user/*"],
       "@auth/*": ["src/auth/*"],
       "@team/*": ["src/team/*"],
       "@match/*": ["src/match/*"],
