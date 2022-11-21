@@ -7,6 +7,7 @@ import {
   InternalServerErrorException,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -31,6 +32,13 @@ export class BetController {
     return {
       data: newBet,
     };
+  }
+
+  @Post('bets-result')
+  @UseGuards(AuthenticatedGuard)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async recognitionsBetsResult(@Query('matchCode') matchCode: string) {
+    return await this.betService.recognitionsBetsResult(matchCode);
   }
 
   @Get()
