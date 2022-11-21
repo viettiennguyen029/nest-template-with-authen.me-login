@@ -18,6 +18,7 @@ import { BetService } from '@bet/bet.service';
 import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
 import { AuthenticatedGuard } from 'src/common/guard/authenticated.guard';
 import { IRequest } from 'src/common/interface/common.interface';
+import { QueryBetDto } from '@bet/dto/query-bet-dto';
 
 @Controller('bets')
 export class BetController {
@@ -34,18 +35,22 @@ export class BetController {
     };
   }
 
-  @Post('bets-result')
+  @Post('bets-recognition')
   @UseGuards(AuthenticatedGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async recognitionsBetsResult(@Query('matchCode') matchCode: string) {
-    return await this.betService.recognitionsBetsResult(matchCode);
+  async recognitionsBetsResult(
+    @Query('matchCode') matchCode: string,
+    @Query('type') type: string,
+  ) {
+    return await this.betService.recognitionsBetsResult(matchCode, type);
   }
 
   @Get()
   @Public()
-  async getBets() {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getBets(@Query() query: QueryBetDto) {
     try {
-      const bets = await this.betService.getBets();
+      const bets = await this.betService.filterBets(query);
       return {
         data: bets,
       };

@@ -53,4 +53,15 @@ export class MatchService {
       },
     });
   }
+
+  async getMatchByCode(code: string): Promise<Match> {
+    return await this.prismaService.match.findFirst({
+      where: {
+        code: code,
+      },
+      orderBy: {
+        startTime: 'desc',
+      },
+    });
+  }
 }

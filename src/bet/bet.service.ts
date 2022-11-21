@@ -3,21 +3,19 @@ import { Bet } from '@prisma/client';
 import { PrismaService } from '@prisma_module/prisma.service';
 import { CreateNewBetDto } from '@bet/dto/create-bet.dto';
 import { BET_STATUS, ODDS_CODE } from 'src/common/constant/constants';
+import { QueryBetDto } from '@bet/dto/query-bet-dto';
+import { MatchService } from '@match/match.service';
 
 @Injectable()
 export class BetService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private matchService: MatchService,
+  ) {}
 
-  async recognitionsBetsResult(matchCode: string) {
+  async recognitionsBetsResult(matchCode: string, type?: string) {
     // Get all bets record of this match
-    const match = await this.prismaService.match.findFirst({
-      where: {
-        code: matchCode,
-      },
-      orderBy: {
-        startTime: 'desc',
-      },
-    });
+    const match = await this.matchService.getMatchByCode(matchCode);
     if (!match) {
       throw new HttpException('Match code is invalid', HttpStatus.BAD_REQUEST);
     }
@@ -27,8 +25,11 @@ export class BetService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    const bets = await this.filterBets(match.id);
+    const betQuery: QueryBetDto = {
+      matchCode: matchCode,
+      type: type,
+    };
+    const bets = await this.filterBets(betQuery);
     let status = BET_STATUS.INIT;
 
     if (match.matchTimeHome > match.matchTimeAway) {
@@ -129,14 +130,6 @@ export class BetService {
     });
   }
 
-  async getBets(): Promise<Bet[]> {
-    return await this.prismaService.bet.findMany({
-      include: {
-        match: true,
-      },
-    });
-  }
-
   async getBetById(id: number): Promise<Bet> {
     return await this.prismaService.bet.findUnique({
       where: {
@@ -148,17 +141,20 @@ export class BetService {
     });
   }
 
-  async filterBets(
-    matchId?: number,
-    code?: string,
-    userId?: number,
-  ): Promise<Bet[]> {
+  async filterBets(input: QueryBetDto, userId?: number): Promise<Bet[]> {
     const query: { [key: string]: any } = {};
-    if (matchId) {
-      query.matchId = matchId;
+    if (input.matchCode) {
+      const match = await this.matchService.getMatchByCode(input.matchCode);
+      if (!match) {
+        throw new HttpException(
+          'Match code is invalid',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      query.matchId = match.id;
     }
-    if (code) {
-      query.code = code;
+    if (input.code) {
+      query.code = input.code;
     }
     if (userId) {
       query.userId = userId;
