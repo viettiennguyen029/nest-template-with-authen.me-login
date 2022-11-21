@@ -20,15 +20,27 @@ export class MatchService {
       query.awayTeamId = input.awayTeamId;
     }
     if (input.rangeTime) {
+      const now = new Date();
       //TODO: support more range time filter
       switch (input.rangeTime) {
         case RANGE_TIME.TODAY:
-          const todayStart = new Date(new Date().setHours(0, 0, 0, 0));
-          const todayEnd = new Date(new Date().setHours(23, 59, 59, 999));
+          const todayStart = new Date(now.setHours(0, 0, 0, 0));
+          const todayEnd = new Date(now.setHours(23, 59, 59, 999));
           query.startTime = {
             gte: todayStart,
             lte: todayEnd,
           };
+          break;
+        case RANGE_TIME.TOMORROW:
+          const tomorrow = new Date(now.getTime() + 1000 * 60 * 60 * 24);
+          const tomorrowStart = new Date(tomorrow.setHours(0, 0, 0, 0));
+          const tomorrowEnd = new Date(tomorrow.setHours(23, 59, 59, 999));
+          query.startTime = {
+            gte: tomorrowStart,
+            lte: tomorrowEnd,
+          };
+          break;
+        case RANGE_TIME.THIS_WEEK:
           break;
         default:
           break;
@@ -41,7 +53,7 @@ export class MatchService {
         awayTeam: true,
       },
       orderBy: {
-        startTime: 'desc',
+        startTime: 'asc',
       },
     });
   }

@@ -22,6 +22,7 @@ export enum MATCH_TYPE {
 
 export enum RANGE_TIME {
   TODAY = 'TODAY',
+  TOMORROW = 'TOMORROW',
   THIS_WEEK = 'THIS WEEK',
   CUSTOM = 'CUSTOM',
 }
