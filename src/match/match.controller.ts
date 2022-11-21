@@ -4,9 +4,11 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  Query,
 } from '@nestjs/common';
 import { Public } from 'src/common/decorator/public.decorator';
 import { MatchService } from '@match/match.service';
+import { QueryMatchDto } from '@match/dto/query-match.dto';
 
 @Controller('matches')
 export class MatchController {
@@ -14,9 +16,9 @@ export class MatchController {
 
   @Get()
   @Public()
-  async getMatches() {
+  async getMatches(@Query() query: QueryMatchDto) {
     try {
-      const matches = await this.matchService.getMatches();
+      const matches = await this.matchService.filterMatches(query);
       return {
         data: matches,
       };
