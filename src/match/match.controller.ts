@@ -4,7 +4,10 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  Param,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Public } from 'src/common/decorator/public.decorator';
 import { MatchService } from '@match/match.service';
@@ -16,6 +19,7 @@ export class MatchController {
 
   @Get()
   @Public()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async getMatches(@Query() query: QueryMatchDto) {
     try {
       const matches = await this.matchService.filterMatches(query);
@@ -33,5 +37,15 @@ export class MatchController {
       }
       throw new InternalServerErrorException(error);
     }
+  }
+
+  @Get(':id')
+  @Public()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getMatchDetail(@Param('id') id: number) {
+    const match = await this.matchService.getMatchById(id);
+    return {
+      data: match,
+    };
   }
 }

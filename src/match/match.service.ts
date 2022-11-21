@@ -45,4 +45,12 @@ export class MatchService {
       },
     });
   }
+
+  async getMatchById(id: number): Promise<Match> {
+    return await this.prismaService.match.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
 }
