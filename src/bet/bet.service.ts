@@ -84,6 +84,7 @@ export class BetService {
         userId: user.id,
         matchId: data.matchId,
         type: data.type,
+        code: data.code
       },
     });
 

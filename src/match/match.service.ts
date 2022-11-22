@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Match } from '@prisma/client';
+import {Match, Odd} from '@prisma/client';
 import { PrismaService } from '@prisma_module/prisma.service';
 import { QueryMatchDto } from '@match/dto/query-match.dto';
 import { RANGE_TIME } from 'src/common/constant/constants';
@@ -53,7 +53,7 @@ export class MatchService {
         awayTeam: true,
       },
       orderBy: {
-        startTime: 'asc',
+        startTime: 'desc',
       },
     });
   }
@@ -62,6 +62,10 @@ export class MatchService {
     return await this.prismaService.match.findUnique({
       where: {
         id: id,
+      },
+      include: {
+        homeTeam: true,
+        awayTeam: true,
       },
     });
   }
@@ -73,6 +77,20 @@ export class MatchService {
       },
       orderBy: {
         startTime: 'desc',
+      },
+    });
+  }
+
+  async getOddByMatch(matchId): Promise<Odd[]> {
+    return await this.prismaService.odd.findMany({
+      where: {
+        matchId: matchId
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        match: false,
       },
     });
   }

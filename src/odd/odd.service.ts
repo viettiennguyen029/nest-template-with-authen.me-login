@@ -13,4 +13,15 @@ export class OddService {
       },
     });
   }
+
+  async getOddByMatch(matchId): Promise<Odd[]> {
+    return await this.prismaService.odd.findMany({
+      where: {
+        matchId: matchId
+      },
+      include: {
+        match: true,
+      },
+    });
+  }
 }

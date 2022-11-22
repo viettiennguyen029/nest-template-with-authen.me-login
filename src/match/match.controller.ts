@@ -15,7 +15,9 @@ import { QueryMatchDto } from '@match/dto/query-match.dto';
 
 @Controller('matches')
 export class MatchController {
-  constructor(private readonly matchService: MatchService) {}
+  constructor(
+      private readonly matchService: MatchService,
+  ) {}
 
   @Get()
   @Public()
@@ -44,6 +46,16 @@ export class MatchController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async getMatchDetail(@Param('id') id: number) {
     const match = await this.matchService.getMatchById(id);
+    return {
+      data: match,
+    };
+  }
+
+  @Get(':id/odds')
+  @Public()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getOddByMatch(@Param('id') id: number) {
+    const match = await this.matchService.getOddByMatch(id);
     return {
       data: match,
     };
